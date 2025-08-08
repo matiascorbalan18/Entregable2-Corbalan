@@ -19,6 +19,7 @@ const formularioCompra = document.getElementById("formularioCompra")
 // funciones
 
 const calcularTotalCarrito = ()=>{
+    // calcula el total del carrito
     let total = carrito.reduce((suma,elemento)=>{
         return suma + elemento.precio
     },0)
@@ -26,16 +27,19 @@ const calcularTotalCarrito = ()=>{
 }
 
 const mostrarTotal = ()=>{
+    // muestra el total del carrito
     const divTotal = document.getElementById("total")
     divTotal.innerText = `Total: $${calcularTotalCarrito()}`
 }
 
 const guardarCarrito = ()=>{
+    // guarda carrito
     const carritoJSON = JSON.stringify(carrito)
     localStorage.setItem("carrito", carritoJSON)
 }
 
 const mostrarCarrito = ()=>{
+    // muestra carrito
     listaCarrito.innerHTML = ""
     carrito.forEach(prod=>{
         const li = document.createElement("li")
@@ -104,3 +108,18 @@ function inicializar(){
 // ejecucion de codigo
 
 inicializar()
+
+const traerProd = async ()=>{
+    try {
+        const datosJson = await fetch("lista.json")
+        const datosProcesados = await datosJson.json()
+
+        prod = datosProcesados
+        mostrarProd()
+    } catch (error) {
+        console.warn("Este es el error:", error)
+        listaProd.innerText = "Error 404, no se consiguieron los datos."
+    }
+}
+
+traerProd()
